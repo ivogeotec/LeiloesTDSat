@@ -1,9 +1,32 @@
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 public class vendasVIEW extends javax.swing.JFrame {
 
     public vendasVIEW() {
         initComponents();
+        listarProdutosVendidos();
+    }
+
+    private void listarProdutosVendidos() {
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            DefaultTableModel model = (DefaultTableModel) tabelaVendas.getModel();
+            model.setNumRows(0);
+
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosVendidos();
+
+            for (int i = 0; i < listagem.size(); i++) {
+                model.addRow(new Object[]{
+                    listagem.get(i).getId(),
+                    listagem.get(i).getNome(),
+                    listagem.get(i).getValor(),
+                    listagem.get(i).getStatus()
+                });
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar vendas: " + e.getMessage());
+        }
     }
 
     private void initComponents() {
@@ -77,7 +100,6 @@ public class vendasVIEW extends javax.swing.JFrame {
         });
     }
 
-    // Declaração dos componentes
     private javax.swing.JButton btnVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
